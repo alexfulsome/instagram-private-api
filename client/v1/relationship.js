@@ -46,7 +46,7 @@ Relationship.pendingFollowers = function (session) {
         .send()
         .then(function(data) {
             return _.map(data.users, function(data, key) {
-                var relationship = new Relationship(session, data);    
+                var relationship = new Relationship(session, data);
                 relationship.setAccountId(data.pk);
                 return relationship;
             })
@@ -79,7 +79,7 @@ Relationship.getMany = function (session, accountIds) {
         .send()
         .then(function(data) {
             return _.map(data.friendship_statuses, function(data, key) {
-                var relationship = new Relationship(session, data);    
+                var relationship = new Relationship(session, data);
                 relationship.setAccountId(key);
                 return relationship;
             })
@@ -96,7 +96,7 @@ Relationship.create = function (session, accountId) {
         .signPayload()
         .send()
         .then(function(data) {
-            var relationship = new Relationship(session, data.friendship_status);    
+            var relationship = new Relationship(session, data.friendship_status);
             relationship.setAccountId(accountId);
             return relationship;
         })
@@ -119,9 +119,9 @@ Relationship.destroy = function (session, accountId) {
         .signPayload()
         .send()
         .then(function(data) {
-            var relationship = new Relationship(session, data.friendship_status);    
+            var relationship = new Relationship(session, data.friendship_status);
             relationship.setAccountId(accountId);
-            return relationship; 
+            return relationship;
         })
 };
 
@@ -176,4 +176,30 @@ Relationship.unblock = function (session, accountId) {
 
 Relationship.prototype.unblock = function () {
     return Relationship.unblock(this.session, this.accountId)
+};
+
+Relationship.searchFollowings = function (session, user_id, query) {
+    return new Request(session)
+        .setMethod('GET')
+        .setResource('searchFollowing',{
+            user_id: user_id,
+            query: query
+        })
+        .send()
+        .then(function(json) {
+            return json;
+        })
+};
+
+Relationship.searchFollowers = function (session, user_id, query) {
+    return new Request(session)
+        .setMethod('GET')
+        .setResource('searchFollowers',{
+            user_id: user_id,
+            query: query
+        })
+        .send()
+        .then(function(json) {
+            return json;
+        })
 };
